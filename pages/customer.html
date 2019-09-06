@@ -1,0 +1,120 @@
+<style>
+	.btns {
+		margin-bottom: 5px;
+	}
+	.btn {
+		display: inline-block;
+		padding: .3em 1.2em;
+		border-radius: 3px;
+		border:1px solid #ccc;
+		color: #333;
+		cursor :pointer;
+	}
+	table.table {
+		box-sizing: border-box;
+		width: 100%;
+		border-collapse: collapse;
+	}
+	table.table td ,
+	table.table th {
+		border: 1px solid #ccc;
+		line-height: 2em;
+		text-align: center;
+	}
+
+	table.table tr.current {
+		background-color: #ededed;
+	}
+
+	.none {
+		display: none;
+	}
+</style>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script>
+var baseURL = "http://134.175.154.93:6677";
+// 初始化数据
+function initData(){
+	var url = "/customer/findCustomerAll"
+	$.get(baseURL+url,function(response){
+		$("#customer_tbl > tbody").empty();
+		response.data.forEach(function(item){
+			var newTr = $(`<tr>
+				<td><input type="checkbox" value="`+item.id+`"></td>
+				<td>`+item.realname+`</td>
+				<td>`+item.status+`</td>
+				<td>`+item.telephone+`</td>
+				<td>
+					<a class="btn_del" href="javascript:void(0)">删除</a>
+					<a class="btn_upd" href="javascript:void(0)">修改</a>
+				</td>
+			</tr>`);
+			$("#customer_tbl > tbody").append(newTr);
+		});
+	});
+}
+
+$(function(){
+	// 初始化加载
+	initData();
+	// 为删除按钮绑定事件
+	$("#customer_tbl > tbody").on("click","a",function(){
+		switch(this.className){
+			case "btn_del":
+				alert("del");
+				var id = $(this).parents("tr").find("input").val()
+				break;
+			case "btn_upd":
+				alert("upd");
+				break;
+		}
+	})
+
+
+
+})
+</script>
+<div class="customer">
+	<div class="btns">
+		<div class="btn" id="btn_add">添加</div>
+		<div class="btn">批量导入</div>
+		<div class="btn">批量删除</div>
+	</div>
+	<div class="forms">
+		<form action="javascript:void(0)">
+			<input type="hidden" name="id">
+			<table>
+				<tbody>
+					<tr>
+						<td>姓名</td>
+						<td><input type="text" name="realname"></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>手机号</td>
+						<td><input type="text" name="telephone"></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="保存"></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<table class="table" id="customer_tbl">
+		<thead>
+			<tr>
+				<th width="60px">编号</th>
+				<th width="200px">姓名</th>
+				<th>头像</th>
+				<th>手机</th>
+				<th width="100px">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			
+		</tbody>
+	</table>
+
+</div>
